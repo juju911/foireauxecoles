@@ -111,7 +111,7 @@ const ChatBot = () => {
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(!isOpen)}
-          className="h-14 w-14 rounded-full bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-white/20"
+          className="h-14 w-14 rounded-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:from-orange-600 hover:via-orange-700 hover:to-orange-800 shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-white/20"
         >
           <MessageCircle className="h-6 w-6 text-white" />
         </Button>
