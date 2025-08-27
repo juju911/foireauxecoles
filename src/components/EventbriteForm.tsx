@@ -3,12 +3,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { createClient } from '@supabase/supabase-js';
 
 interface FormData {
   name: string;
   email: string;
   phone: string;
 }
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+);
 
 const EventbriteForm = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -32,25 +38,34 @@ const EventbriteForm = () => {
     setIsLoading(true);
 
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real implementation, you would call the Eventbrite API
-      // For now, we'll redirect to the Eventbrite organizer page
-      toast({
-        title: "Inscription réussie !",
-        description: "Vous allez être redirigé vers la page de réservation de tickets.",
+      // Call our Eventbrite registration edge function
+      const { data, error } = await supabase.functions.invoke('eventbrite-registration', {
+        body: formData
       });
 
-      // Redirect to Eventbrite organizer page
-      setTimeout(() => {
-        window.open('https://www.eventbrite.fr/o/arna-event-115369928671', '_blank');
-      }, 2000);
+      if (error) {
+        throw error;
+      }
+
+      if (data.success) {
+        toast({
+          title: "Inscription réussie !",
+          description: "Vous allez être redirigé vers la page de réservation de tickets.",
+        });
+
+        // Redirect to Eventbrite organizer page after successful registration
+        setTimeout(() => {
+          window.open(data.eventbriteUrl, '_blank');
+        }, 2000);
+      } else {
+        throw new Error(data.error || 'Registration failed');
+      }
 
     } catch (error) {
+      console.error('Registration error:', error);
       toast({
         title: "Erreur",
-        description: "Une erreur est survenue. Veuillez réessayer.",
+        description: "Une erreur est survenue lors de l'inscription. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
