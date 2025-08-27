@@ -43,11 +43,23 @@ const ChatBot = () => {
     setIsLoading(true);
 
     try {
+      console.log('Envoi du message:', inputMessage);
+      
       const { data, error } = await supabase.functions.invoke('ai-chatbot', {
         body: { message: inputMessage }
       });
 
-      if (error) throw error;
+      console.log('Réponse reçue:', { data, error });
+
+      if (error) {
+        console.error('Erreur Supabase:', error);
+        throw error;
+      }
+
+      if (!data || !data.response) {
+        console.error('Réponse invalide:', data);
+        throw new Error('Réponse invalide du serveur');
+      }
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -56,9 +68,23 @@ const ChatBot = () => {
         timestamp: new Date()
       };
 
+      console.log('Message bot créé:', botMessage);
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
-      console.error('Erreur chatbot:', error);
+      console.error('Erreur chatbot complète:', error);
+      
+      // Message d'erreur plus détaillé pour l'utilisateur
+      const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+      
+      const errorBotMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: `Désolé, je rencontre une difficulté technique. Erreur: ${errorMessage}. Veuillez réessayer dans quelques instants.`,
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorBotMessage]);
+      
       toast({
         title: "Erreur",
         description: "Impossible de contacter l'assistant. Veuillez réessayer.",
