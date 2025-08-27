@@ -29,7 +29,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-mini-2025-08-07',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -63,7 +63,8 @@ Réponds en français de manière concise et utile.`
             content: message
           }
         ],
-        max_completion_tokens: 150,
+        max_tokens: 150,
+        temperature: 0.7,
       }),
     });
 
