@@ -3,6 +3,7 @@ import Countdown from "@/components/Countdown";
 import EventbriteForm from "@/components/EventbriteForm";
 import ReassuranceIcons from "@/components/ReassuranceIcons";
 import WhyParticipate from "@/components/WhyParticipate";
+import ChatBot from "@/components/ChatBot";
 
 const Index = () => {
   return (
@@ -68,6 +69,9 @@ const Index = () => {
           </p>
         </footer>
       </div>
+
+      {/* Chatbot */}
+      <ChatBot />
     </div>
   );
 };
