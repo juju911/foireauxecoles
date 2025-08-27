@@ -74,7 +74,12 @@ Réponds en français de manière concise et utile.`
     }
 
     const data = await response.json();
-    console.log('OpenAI response received');
+    console.log('OpenAI response received:', data);
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
+      console.error('Structure de réponse OpenAI invalide:', data);
+      throw new Error('Réponse OpenAI invalide');
+    }
     
     const aiResponse = data.choices[0].message.content;
 

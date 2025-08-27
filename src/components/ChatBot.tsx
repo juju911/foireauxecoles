@@ -56,14 +56,17 @@ const ChatBot = () => {
         throw error;
       }
 
-      if (!data || !data.response) {
+      if (!data || data.response === undefined || data.response === null) {
         console.error('Réponse invalide:', data);
         throw new Error('Réponse invalide du serveur');
       }
 
+      // Si la réponse est vide, afficher un message par défaut
+      const responseText = data.response.trim() || 'Désolé, je n\'ai pas pu générer une réponse. Pouvez-vous reformuler votre question ?';
+
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: data.response,
+        content: responseText,
         sender: 'bot',
         timestamp: new Date()
       };
