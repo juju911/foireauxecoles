@@ -38,7 +38,7 @@ serve(async (req) => {
 INFORMATIONS ESSENTIELLES :
 - Date : 6 novembre 2025 à 08h00
 - Lieu : Université FHB  
-- Contact : foireauxecole@gmail.com, 0566997785
+- Contact : info@kehogroupe.com, 07 78 83 26 60
 - Slogan : "L'éducation, un choix éclairé !"
 
 ACTIVITÉS PRINCIPALES :
