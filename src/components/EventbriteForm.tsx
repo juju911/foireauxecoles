@@ -4,11 +4,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@supabase/supabase-js';
+import TicketDownload from './TicketDownload';
 
 interface FormData {
   name: string;
   email: string;
   phone: string;
+}
+
+interface TicketData {
+  registrationId: string;
+  name: string;
+  email: string;
+  phone: string;
+  eventbriteUrl: string;
 }
 
 const supabase = createClient(
@@ -23,6 +32,8 @@ const EventbriteForm = () => {
     phone: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showTicket, setShowTicket] = useState(false);
+  const [ticketData, setTicketData] = useState<TicketData | null>(null);
   const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,13 +61,18 @@ const EventbriteForm = () => {
       if (data.success) {
         toast({
           title: "Inscription réussie !",
-          description: "Vous allez être redirigé vers la page de réservation de tickets.",
+          description: "Votre ticket est maintenant disponible au téléchargement.",
         });
 
-        // Redirect to Eventbrite organizer page after successful registration
-        setTimeout(() => {
-          window.open(data.eventbriteUrl, '_blank');
-        }, 2000);
+        // Show ticket instead of redirecting immediately
+        setTicketData({
+          registrationId: data.registrationId,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          eventbriteUrl: data.eventbriteUrl,
+        });
+        setShowTicket(true);
       } else {
         throw new Error(data.error || 'Registration failed');
       }
@@ -72,6 +88,16 @@ const EventbriteForm = () => {
       setIsLoading(false);
     }
   };
+
+  const resetForm = () => {
+    setFormData({ name: '', email: '', phone: '' });
+    setShowTicket(false);
+    setTicketData(null);
+  };
+
+  if (showTicket && ticketData) {
+    return <TicketDownload ticketData={ticketData} onBackToForm={resetForm} />;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-glow">
