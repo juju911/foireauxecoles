@@ -111,7 +111,7 @@ const ChatBot = () => {
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(!isOpen)}
-          className="h-14 w-14 rounded-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg"
+          className="h-14 w-14 rounded-full bg-gradient-to-r from-primary via-primary/90 to-primary/80 hover:from-primary/90 hover:via-primary/80 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-white/20"
         >
           <MessageCircle className="h-6 w-6 text-white" />
         </Button>
@@ -119,64 +119,64 @@ const ChatBot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-96 h-[500px] animate-fade-in">
-          <Card className="h-full flex flex-col shadow-2xl border-primary/20 bg-background/95 backdrop-blur-sm">
-            <CardHeader className="flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-primary to-primary/80 text-white rounded-t-lg">
+        <div className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] h-[600px] max-h-[calc(100vh-200px)] animate-fade-in">
+          <Card className="h-full flex flex-col shadow-2xl border border-primary/30 bg-white/95 backdrop-blur-sm rounded-xl overflow-hidden">
+            <CardHeader className="flex-row items-center justify-between space-y-0 p-4 bg-gradient-to-r from-primary via-primary/90 to-primary/80 text-white">
               <CardTitle className="text-lg font-semibold">
-                Assistant Foire aux Écoles
+                🎓 Assistant Foire aux Écoles
               </CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-white/20 h-8 w-8 p-0"
+                className="text-white hover:bg-white/20 h-8 w-8 p-0 rounded-full"
               >
                 <X className="h-4 w-4" />
               </Button>
             </CardHeader>
 
-            <CardContent className="flex-1 flex flex-col p-0">
+            <CardContent className="flex-1 flex flex-col p-0 min-h-0">
               {/* Messages */}
-              <ScrollArea className="flex-1 p-4">
-                <div className="space-y-4">
+              <ScrollArea className="flex-1 p-4 max-h-full">
+                <div className="space-y-4 pb-4">
                   {messages.map((message) => (
                     <div
                       key={message.id}
-                      className={`flex items-start gap-2 ${
+                      className={`flex items-start gap-3 max-w-full ${
                         message.sender === 'user' ? 'justify-end' : 'justify-start'
                       }`}
                     >
                       {message.sender === 'bot' && (
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-1">
                           <Bot className="w-4 h-4 text-primary" />
                         </div>
                       )}
                       <div
-                        className={`max-w-[280px] rounded-lg p-3 text-sm ${
+                        className={`max-w-[260px] rounded-2xl px-4 py-3 text-sm leading-relaxed break-words ${
                           message.sender === 'user'
-                            ? 'bg-primary text-white ml-auto'
-                            : 'bg-secondary text-secondary-foreground'
+                            ? 'bg-primary text-white ml-auto rounded-br-md shadow-md'
+                            : 'bg-gray-100 text-gray-800 border border-gray-200 shadow-sm'
                         }`}
                       >
                         {message.content}
                       </div>
                       {message.sender === 'user' && (
-                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 mt-1">
                           <User className="w-4 h-4 text-primary" />
                         </div>
                       )}
                     </div>
                   ))}
                   {isLoading && (
-                    <div className="flex items-start gap-2">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center mt-1">
                         <Bot className="w-4 h-4 text-primary" />
                       </div>
-                      <div className="bg-secondary text-secondary-foreground rounded-lg p-3 text-sm">
+                      <div className="bg-gray-100 border border-gray-200 rounded-2xl px-4 py-3 text-sm shadow-sm">
                         <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                          <div className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-2 h-2 bg-primary/70 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-primary/70 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-2 h-2 bg-primary/70 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                         </div>
                       </div>
                     </div>
@@ -185,21 +185,21 @@ const ChatBot = () => {
               </ScrollArea>
 
               {/* Input */}
-              <div className="p-4 border-t border-border">
-                <div className="flex gap-2">
+              <div className="p-4 border-t border-gray-200 bg-gray-50/80 backdrop-blur-sm">
+                <div className="flex gap-3 items-end">
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Posez votre question..."
                     disabled={isLoading}
-                    className="flex-1"
+                    className="flex-1 rounded-full border-gray-300 bg-white shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
                   />
                   <Button
                     onClick={sendMessage}
                     disabled={!inputMessage.trim() || isLoading}
                     size="sm"
-                    className="px-3"
+                    className="h-10 w-10 rounded-full bg-primary hover:bg-primary/90 shadow-md flex-shrink-0"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
