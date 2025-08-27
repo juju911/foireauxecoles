@@ -65,7 +65,7 @@ const Index = () => {
         {/* Footer */}
         <footer className="relative z-10 py-8 text-center">
           <p className="text-white/60 text-sm">
-            © 2025 La Foire aux Écoles - Organisé par Arna Event
+            © 2025 La Foire aux Écoles - Organisé par KEHO GROUP
           </p>
         </footer>
       </div>
