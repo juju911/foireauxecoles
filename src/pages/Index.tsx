@@ -113,30 +113,9 @@ const Index = () => {
             </div>
 
             {/* Registration Form */}
-            <section style="padding:50px; text-align:center; background:linear-gradient(135deg,#004aad,#ff9800); color:white; border-radius:20px;">
-                <h1 style="font-size:40px; font-weight:bold;">La Foire aux Écoles 2025</h1>
-                <p style="font-size:20px; margin-bottom:30px;">L’éducation, un choix éclairé ! <br> Rendez-vous le <strong>06 novembre 2025 à 08h00</strong></p>
-              
-                <!-- Compte à rebours -->
-                <div id="countdown" style="font-size:24px; margin:20px 0; font-weight:bold;"></div>
-              
-                <!-- Formulaire -->
-                <form id="eventForm" style="max-width:400px; margin:auto;">
-                  <input type="text" id="name" placeholder="Nom complet" required style="width:100%; padding:12px; margin:10px 0; border-radius:10px; border:none;">
-                  <input type="email" id="email" placeholder="Email" required style="width:100%; padding:12px; margin:10px 0; border-radius:10px; border:none;">
-                  <input type="tel" id="phone" placeholder="Téléphone" required style="width:100%; padding:12px; margin:10px 0; border-radius:10px; border:none;">
-                  
-                  <button type="submit" style="background:#ff5722; color:white; font-size:18px; padding:15px 25px; border:none; border-radius:50px; cursor:pointer;">
-                    Je m’inscris maintenant
-                  </button>
-                </form>
-              
-                <!-- Message retour -->
-                <div id="confirmation" style="margin-top:20px; font-size:18px; display:none;">
-                  ✅ Inscription réussie ! <br>
-                  <a id="ticketLink" href="#" target="_blank" style="color:yellow; font-weight:bold;">Télécharger mon ticket 🎟️</a>
-                </div>
-              </section>
+            <div className="max-w-md mx-auto mb-8 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              <EventbriteForm />
+            </div>
 
             {/* Reassurance Icons */}
             <div className="animate-fade-in" style={{ animationDelay: '0.9s' }}>
