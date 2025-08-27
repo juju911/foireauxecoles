@@ -5,6 +5,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+)
+
 interface RegistrationData {
   name: string;
   email: string;
@@ -22,13 +27,22 @@ Deno.serve(async (req) => {
     
     console.log('Registration attempt:', { name, email, phone });
 
-    // Get Eventbrite credentials from environment
-    const eventbriteToken = Deno.env.get('EVENTBRITE_PRIVATE_TOKEN');
-    
-    if (!eventbriteToken) {
-      console.error('Missing Eventbrite credentials');
+    // Store registration in database first
+    const { data: registration, error: dbError } = await supabase
+      .from('registrations')
+      .insert({
+        name,
+        email,
+        phone,
+        status: 'pending'
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('Database error:', dbError);
       return new Response(
-        JSON.stringify({ error: 'Configuration error' }),
+        JSON.stringify({ error: 'Failed to save registration' }),
         { 
           status: 500, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -36,40 +50,26 @@ Deno.serve(async (req) => {
       );
     }
 
-    // For now, we'll create a contact in Eventbrite and return success
-    // In a real implementation, you'd create an attendee for a specific event
-    const eventbriteResponse = await fetch('https://www.eventbriteapi.com/v3/users/me/contact_lists/', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${eventbriteToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: `Foire aux Écoles - ${new Date().toISOString()}`,
-        emails: [email]
+    console.log('Registration saved to database:', registration);
+
+    // For now, we'll skip the Eventbrite API call and just redirect
+    // The registration is saved in the database
+    
+    // Update registration status to success
+    await supabase
+      .from('registrations')
+      .update({ 
+        status: 'completed',
+        eventbrite_response: { redirect: true }
       })
-    });
-
-    if (!eventbriteResponse.ok) {
-      console.error('Eventbrite API error:', await eventbriteResponse.text());
-      return new Response(
-        JSON.stringify({ error: 'Registration failed' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      );
-    }
-
-    const result = await eventbriteResponse.json();
-    console.log('Eventbrite registration successful:', result);
+      .eq('id', registration.id);
 
     // Return success with registration details
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Inscription réussie !',
-        registrationId: result.id,
+        registrationId: registration.id,
         eventbriteUrl: 'https://www.eventbrite.fr/o/arna-event-115369928671'
       }),
       { 
