@@ -149,6 +149,23 @@ All colors MUST be HSL.
   .animate-glow {
     animation: glow 2s ease-in-out infinite alternate;
   }
+
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out forwards;
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s ease-out forwards;
+    transform: scale(0.9);
+    opacity: 0;
+  }
 }
 
 @keyframes pulse-soft {
@@ -180,5 +197,38 @@ All colors MUST be HSL.
   }
   to {
     box-shadow: 0 0 30px hsl(25 100% 50% / 0.8);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
