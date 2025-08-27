@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -27,6 +27,14 @@ const ChatBot = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll vers le bas quand de nouveaux messages arrivent
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isLoading]);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -181,6 +189,8 @@ const ChatBot = () => {
                       </div>
                     </div>
                   )}
+                  {/* Élément invisible pour forcer le scroll vers le bas */}
+                  <div ref={messagesEndRef} />
                 </div>
               </ScrollArea>
 
